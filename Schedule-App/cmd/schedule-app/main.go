@@ -1,9 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
-	"strings"
 
 	scheduleapp "github.com.whiskeyjack4code/CLI-Tools/Schedule-App"
 )
@@ -12,25 +12,46 @@ const fileName = ".apps.json"
 
 func main() {
 
-	list := &scheduleapp.AppList{}
+  appointment := flag.String("appointment", "", "Appointment to Set in Scheduler")
+  list := flag.Bool("list", false, "List all Appointments")
+  attend := flag.Int("attend", 0, "Appointment attended")
 
-	if err := list.RetrieveApp(fileName); err != nil {
+  flag.Parse()
+
+	l := &scheduleapp.AppList{}
+
+	if err := l.RetrieveApp(fileName); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
 	switch {
-	case len(os.Args) == 1:
-		for _, v := range *list {
-			fmt.Println(v.Name)
+	case *list:
+		for _, app := range *l {
+      if !app.Attended {
+        fmt.Println(app)
+      }
 		}
-	default:
-		app := strings.Join(os.Args[1:], " ")
-		list.AddAppointment(app)
+  case *attend > 0:
+    if err := l.SetVisitedByID(*attend); err != nil {
+      fmt.Fprintln(os.Stderr, err)
+      os.Exit(1)
+    }
+    if err := l.SaveApp(fileName); err != nil {
+      fmt.Fprintln(os.Stderr, err)
+      os.Exit(1)
+    }
 
-		if err := list.SaveApp(fileName); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
+  case *appointment != "":
+    l.AddAppointment(*appointment)
+
+    if err := l.SaveApp(fileName); err != nil {
+      fmt.Fprintln(os.Stderr, err)
+    }
+
+	default:
+    fmt.Fprintln(os.Stderr, "invalid option selected")
+    os.Exit(1)
+
 	}
 }
