@@ -51,7 +51,6 @@ func TestSetVisitedByName(t *testing.T) {
 		t.Errorf("expected %s, got %s", appName, l[0].Name)
 	}
 
-
 	if l[0].Attended {
 		t.Errorf("appointment should not be be set to attended yet")
 	}
