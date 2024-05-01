@@ -18,13 +18,13 @@ type app struct {
 type AppList []app
 
 func (a *AppList) AddAppointment(name string) {
-  appt := app {
-    Name: name,
-    Attended: false,
-    CreatedAt: time.Now(),
-    AttendedAt: time.Time{},
-  }
-  *a = append(*a, appt)
+	appt := app{
+		Name:       name,
+		Attended:   false,
+		CreatedAt:  time.Now(),
+		AttendedAt: time.Time{},
+	}
+	*a = append(*a, appt)
 }
 
 func (a *AppList) SetVisitedByID(i int) error {
