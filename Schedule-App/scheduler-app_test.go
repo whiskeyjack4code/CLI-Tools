@@ -44,14 +44,13 @@ func TestSetVisitedByID(t *testing.T) {
 func TestSetVisitedByName(t *testing.T) {
 	l := scheduleapp.AppList{}
 
-	task := "Doctor Visit"
-	l.AddAppointment(task)
+	appName := "Doctor Visit"
+	l.AddAppointment(appName)
 
-	if l[0].Name != task {
-		t.Errorf("expected %s, got %s", task, l[0].Name)
+	if l[0].Name != appName {
+		t.Errorf("expected %s, got %s", appName, l[0].Name)
 	}
 
-	appName := "Doctor Visit"
 
 	if l[0].Attended {
 		t.Errorf("appointment should not be be set to attended yet")

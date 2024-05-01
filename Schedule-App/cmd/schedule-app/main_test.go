@@ -38,7 +38,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestSchedulerCLI(t *testing.T) {
-	app1 := " test appointment 1"
+	app1 := "test appointment 1"
 
 	dir, err := os.Getwd()
 
