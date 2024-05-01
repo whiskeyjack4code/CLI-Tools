@@ -29,7 +29,7 @@ func main() {
 	case *list:
 		for _, app := range *l {
 			if !app.Attended {
-				fmt.Println(app)
+				fmt.Println(app.Name)
 			}
 		}
 	case *attend > 0:
