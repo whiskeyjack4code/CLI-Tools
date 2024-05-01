@@ -6,7 +6,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -39,7 +38,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestSchedulerCLI(t *testing.T) {
-	app1 := " test appointment 1"
+	app1 := "test appointment 1"
 
 	dir, err := os.Getwd()
 
@@ -50,7 +49,7 @@ func TestSchedulerCLI(t *testing.T) {
 	cmdPath := filepath.Join(dir, binFile)
 
 	t.Run("AddAppointment", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, strings.Split(app1, " ")...)
+		cmd := exec.Command(cmdPath, "-appointment", app1)
 
 		if err := cmd.Run(); err != nil {
 			t.Fatal(err)
@@ -58,7 +57,7 @@ func TestSchedulerCLI(t *testing.T) {
 	})
 
 	t.Run("ListAppointments", func(t *testing.T) {
-		cmd := exec.Command(cmdPath)
+		cmd := exec.Command(cmdPath, "-list")
 
 		out, err := cmd.CombinedOutput()
 

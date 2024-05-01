@@ -10,18 +10,21 @@ import (
 
 type app struct {
 	Name       string
-	CreatedAt  time.Time
 	Attended   bool
+	CreatedAt  time.Time
 	AttendedAt time.Time
 }
 
 type AppList []app
 
 func (a *AppList) AddAppointment(name string) {
-	*a = append(*a, app{
-		Name:      name,
-		CreatedAt: time.Now(),
-	})
+  appt := app {
+    Name: name,
+    Attended: false,
+    CreatedAt: time.Now(),
+    AttendedAt: time.Time{},
+  }
+  *a = append(*a, appt)
 }
 
 func (a *AppList) SetVisitedByID(i int) error {
