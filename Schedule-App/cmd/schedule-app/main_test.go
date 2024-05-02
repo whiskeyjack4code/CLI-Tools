@@ -44,7 +44,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestSchedulerCLI(t *testing.T) {
-	app1 := "test appointment 1"
+  app1 := "test appointment number 1"
 
 	dir, err := os.Getwd()
 
@@ -89,7 +89,7 @@ func TestSchedulerCLI(t *testing.T) {
 			t.Fatal(err)
 		}
 
-    expected := fmt.Sprintf(" 1: %s\n 2: %s", app1, app2)
+    expected := fmt.Sprintf(" 1: %s\n 2: %s\n", app1, app2)
 
 		if expected != string(out) {
 			t.Errorf("expected %q, got %q instead", expected, string(out))

@@ -22,7 +22,7 @@ func main() {
 		flag.PrintDefaults()
 	}
 
-	add := flag.Bool("add apointment", false, "Appointment to Set in Scheduler")
+	add := flag.Bool("add", false, "Appointment to Set in Scheduler")
 	list := flag.Bool("list", false, "List all Appointments")
 	attend := flag.Int("attend", 0, "Appointment attended")
 
