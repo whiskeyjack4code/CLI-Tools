@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -43,7 +44,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestSchedulerCLI(t *testing.T) {
-	app1 := "test appointment 1"
+  app1 := "test appointment number 1"
 
 	dir, err := os.Getwd()
 
@@ -53,13 +54,31 @@ func TestSchedulerCLI(t *testing.T) {
 
 	cmdPath := filepath.Join(dir, binFile)
 
-	t.Run("AddAppointment", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, "-appointment", app1)
+	t.Run("AddAppointmentFromArguments", func(t *testing.T) {
+		cmd := exec.Command(cmdPath, "-add", app1)
 
 		if err := cmd.Run(); err != nil {
 			t.Fatal(err)
 		}
 	})
+
+  app2 := "test appointment number 2"
+
+  t.Run("AddAppointmentFromSTDIN", func(t *testing.T){
+    cmd := exec.Command(cmdPath, "-add")
+    in, err := cmd.StdinPipe()
+     
+    if err != nil {
+      t.Fatal(err)
+    }
+
+    io.WriteString(in, app2)
+    in.Close()
+
+    if err := cmd.Run(); err != nil {
+      t.Fatal(err)
+    }
+  })
 
 	t.Run("ListAppointments", func(t *testing.T) {
 		cmd := exec.Command(cmdPath, "-list")
@@ -70,7 +89,7 @@ func TestSchedulerCLI(t *testing.T) {
 			t.Fatal(err)
 		}
 
-    expected := fmt.Sprintf(" 1: %s\n", app1)
+    expected := fmt.Sprintf(" 1: %s\n 2: %s\n", app1, app2)
 
 		if expected != string(out) {
 			t.Errorf("expected %q, got %q instead", expected, string(out))
