@@ -65,7 +65,7 @@ func TestSchedulerCLI(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		expected := app1 + "\n"
+    expected := fmt.Sprintf(" 1: %s\n", app1)
 
 		if expected != string(out) {
 			t.Errorf("expected %q, got %q instead", expected, string(out))

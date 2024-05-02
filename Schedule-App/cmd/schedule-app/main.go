@@ -12,6 +12,13 @@ const fileName = ".apps.json"
 
 func main() {
 
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "%s tool developed by WhiskeyJack4Code:\n", os.Args[0])
+		fmt.Fprintln(flag.CommandLine.Output(), "Copyright 2024 David McMahon")
+		fmt.Fprintln(flag.CommandLine.Output(), "Usage:")
+		flag.PrintDefaults()
+	}
+
 	appointment := flag.String("appointment", "", "Appointment to Set in Scheduler")
 	list := flag.Bool("list", false, "List all Appointments")
 	attend := flag.Int("attend", 0, "Appointment attended")
@@ -26,12 +33,10 @@ func main() {
 	}
 
 	switch {
+
 	case *list:
-		for _, app := range *l {
-			if !app.Attended {
-				fmt.Println(app.Name)
-			}
-		}
+    fmt.Print(l)
+
 	case *attend > 0:
 		if err := l.SetVisitedByID(*attend); err != nil {
 			fmt.Fprintln(os.Stderr, err)
