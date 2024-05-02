@@ -17,6 +17,19 @@ type app struct {
 
 type AppList []app
 
+func (a *AppList) String() string {
+  formatted := ""
+
+  for i, v := range *a {
+    prefix := " "
+    if v.Attended {
+      prefix = "X "
+    }
+    formatted += fmt.Sprintf("%s%d: %s\n", prefix, i+1, v.Name)
+  }
+  return formatted
+}
+
 func (a *AppList) AddAppointment(name string) {
 	appt := app{
 		Name:       name,
