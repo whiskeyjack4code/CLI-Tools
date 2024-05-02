@@ -11,14 +11,19 @@ import (
 
 var (
 	binFile  = "schedule"
-	fileName = ".apps.json"
+  fileName string
 )
 
 func TestMain(m *testing.M) {
 	fmt.Println("Building app...")
 
+  var envFile = os.Getenv("APPS_FILENAME")
+  if envFile != "" {
+    fileName = envFile
+  }
+
 	if runtime.GOOS == "windows" {
-		fileName += ".exe"
+		binFile += ".exe"
 	}
 
 	build := exec.Command("go", "build", "-o", binFile)
