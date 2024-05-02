@@ -8,7 +8,7 @@ import (
 	scheduleapp "github.com.whiskeyjack4code/CLI-Tools/Schedule-App"
 )
 
-const fileName = ".apps.json"
+var fileName string = ".apps.json"
 
 func main() {
 
@@ -26,7 +26,12 @@ func main() {
 	flag.Parse()
 
 	l := &scheduleapp.AppList{}
-
+  
+  envFile := os.Getenv("APPS_FILENAME")
+  if envFile != "" {
+    fileName = envFile
+  }
+  
 	if err := l.RetrieveApp(fileName); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
