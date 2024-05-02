@@ -29,12 +29,12 @@ func main() {
 	flag.Parse()
 
 	l := &scheduleapp.AppList{}
-  
-  envFile := os.Getenv("APPS_FILENAME")
-  if envFile != "" {
-    fileName = envFile
-  }
-  
+
+	envFile := os.Getenv("APPS_FILENAME")
+	if envFile != "" {
+		fileName = envFile
+	}
+
 	if err := l.RetrieveApp(fileName); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -43,7 +43,7 @@ func main() {
 	switch {
 
 	case *list:
-    fmt.Print(l)
+		fmt.Print(l)
 
 	case *attend > 0:
 		if err := l.SetVisitedByID(*attend); err != nil {
@@ -55,15 +55,32 @@ func main() {
 			os.Exit(1)
 		}
 
-  case *add:
+	case *add:
 
-    t, err := getTask(os.Stdin, flag.Args()...)
+		t, err := func() (string, error) {
+			var (
+				r    io.Reader = os.Stdin
+				args []string  = flag.Args()
+			)
+			if len(args) > 0 {
+				return strings.Join(args, " "), nil
+			}
+			s := bufio.NewScanner(r)
+			s.Scan()
+			if err := s.Err(); err != nil {
+				return "", err
+			}
+			if len(s.Text()) == 0 {
+				return "", fmt.Errorf("Appointment field cannot be blank")
+			}
+			return s.Text(), nil
+		}()
 
-    if err != nil {
-      fmt.Fprint(os.Stderr, err)
-      os.Exit(1)
-    }
-    
+		if err != nil {
+			fmt.Fprint(os.Stderr, err)
+			os.Exit(1)
+		}
+
 		l.AddAppointment(t)
 
 		if err := l.SaveApp(fileName); err != nil {
@@ -76,23 +93,3 @@ func main() {
 
 	}
 }
-
-func getTask(r io.Reader, args ... string) (string, error) {
-  if len(args) > 0 {
-    return strings.Join(args, " "), nil
-  }
-
-  s := bufio.NewScanner(r)
-  s.Scan()
-
-  if err := s.Err(); err != nil {
-    return "", err
-  }
-
-  if len(s.Text()) == 0 {
-    return "", fmt.Errorf("Appointment field cannot be blank")
-  }
-
-  return s.Text(), nil
-}
-
